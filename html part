@@ -1,0 +1,12 @@
+<div class="container">
+  <h1>🔒 Password Strength & Hash Demo</h1>
+  <input type="password" id="passwordInput" placeholder="Enter your password" />
+  <button id="checkBtn">Check Strength & Hash</button>
+  
+  <div id="strengthContainer">
+    <div id="strengthBar"></div>
+  </div>
+
+  <p id="strengthText"></p>
+  <p id="hashOutput"></p>
+</div>
