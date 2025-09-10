@@ -1,0 +1,36 @@
+// SHA-256 hashing using SubtleCrypto API
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Password strength checker
+function checkStrength(password) {
+  let score = 0;
+  if(password.length >= 8) score++;
+  if(/[A-Z]/.test(password)) score++;
+  if(/[0-9]/.test(password)) score++;
+  if(/[^A-Za-z0-9]/.test(password)) score++;
+  return score;
+}
+
+// Event listener
+document.getElementById('checkBtn').addEventListener('click', async () => {
+  const password = document.getElementById('passwordInput').value;
+  const score = checkStrength(password);
+
+  // Update strength bar
+  const bar = document.getElementById('strengthBar');
+  const text = document.getElementById('strengthText');
+  bar.style.width = (score * 25) + '%';
+  
+  const strengthLabels = ['Very Weak', 'Weak', 'Moderate', 'Strong', 'Very Strong'];
+  text.innerText = `Strength: ${strengthLabels[score]}`;
+
+  // Show SHA-256 hash
+  const hash = await hashPassword(password);
+  document.getElementById('hashOutput').innerText = `SHA-256 Hash: ${hash}`;
+});
